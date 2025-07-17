@@ -1,0 +1,33 @@
+services:
+  # 后端FastAPI服务
+  backend:
+    build: ./backend
+    container_name: interview-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      # 添加Docker环境的CORS支持
+      - BACKEND_CORS_ORIGINS=http://localhost,http://127.0.0.1,http://frontend
+    volumes:
+      # 持久化上传文件
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - app-network
+  
+  # 前端Vue.js服务
+  frontend:
+    build: ./frontend
+    container_name: interview-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
