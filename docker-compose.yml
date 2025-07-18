@@ -7,8 +7,8 @@ services:
       - "8000:8000"
     environment:
       - PYTHONPATH=/app
-      # 添加Docker环境的CORS支持
-      - BACKEND_CORS_ORIGINS=http://localhost,http://127.0.0.1,http://frontend
+      # 添加HTTPS支持的CORS配置
+      - BACKEND_CORS_ORIGINS=http://localhost,https://localhost,http://127.0.0.1,https://127.0.0.1,http://121.40.123.107,https://121.40.123.107
     volumes:
       # 持久化上传文件
       - ./uploads:/app/uploads
@@ -21,7 +21,12 @@ services:
     build: ./frontend
     container_name: interview-frontend
     ports:
-      - "80:80"
+      - "80:80"    # HTTP端口
+      - "443:443"  # HTTPS端口
+    volumes:
+      # 挂载SSL证书到容器
+      - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt:ro
+      - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key:ro
     depends_on:
       - backend
     restart: unless-stopped
