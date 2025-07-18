@@ -8,7 +8,7 @@ import { ElMessage } from 'element-plus'
 import router from '@/router' // 引入 router
 
 // API基础配置, 从环境变量获取，方便部署
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
 
 // 创建axios实例
 const apiClient = axios.create({
