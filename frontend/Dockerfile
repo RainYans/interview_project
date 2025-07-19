@@ -25,6 +25,9 @@ RUN npm run build
 # 第二阶段：Nginx服务器
 FROM nginx:alpine
 
+# 创建SSL证书目录（这是关键！）
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private
+
 # 删除默认的nginx配置
 RUN rm /etc/nginx/conf.d/default.conf
 
@@ -34,8 +37,8 @@ COPY nginx.conf /etc/nginx/conf.d/
 # 复制构建好的Vue.js文件到nginx目录
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# 暴露80端口
-EXPOSE 80
+# 暴露80和443端口
+EXPOSE 80 443
 
 # 启动nginx
 CMD ["nginx", "-g", "daemon off;"]
